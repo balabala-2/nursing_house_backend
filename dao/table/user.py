@@ -52,7 +52,7 @@ class Elderly(base):
     # 录入脸部特征
     face_feature = Column(String)
     # 房间号
-    room_number = Column(Integer)
+    room_number = Column(String)
 
     # 监护人姓名，电话，与老人的关系
     guardian_name = Column(String)

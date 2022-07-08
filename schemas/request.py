@@ -54,7 +54,7 @@ class Elderly_info(BaseModel):
     in_time: datetime.date
     out_time: datetime.date
     face_feature: str
-    room_number: int
+    room_number: str
     guardian_name: str
     guardian_tel: str
     guardian_relation: str

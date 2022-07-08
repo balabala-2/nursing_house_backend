@@ -1,6 +1,6 @@
 import datetime
 
-from DAO import user_operation
+from dao import user_operation
 from schemas.request import Login_info, Register_info, Manager_info
 from schemas.response import Base_response
 from utils.tokens import create_access_token
