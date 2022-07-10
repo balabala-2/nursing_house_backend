@@ -2,6 +2,7 @@ import urllib.parse
 import urllib.request
 import time
 
+#发送短信验证码
 def send_verify_code(tel):
     # 接口地址
     url = 'http://106.ihuyi.com/webservice/sms.php?method=Submit'

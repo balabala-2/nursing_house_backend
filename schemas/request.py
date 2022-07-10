@@ -46,6 +46,7 @@ class Elderly_info(BaseModel):
     """
     老年人信息
     """
+    id: int
     name: str
     gender: int
     tel: str
@@ -63,6 +64,7 @@ class Elderly_info(BaseModel):
 
 
 class Volunteer_info(BaseModel):
+    id: int
     name: str
     gender: int
     tel: str
@@ -75,6 +77,7 @@ class Volunteer_info(BaseModel):
 
 
 class Staff_info(BaseModel):
+    id: int
     name: str
     gender: int
     tel: str

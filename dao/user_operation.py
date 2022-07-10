@@ -4,6 +4,54 @@ from schemas.request import Manager_info, Volunteer_info, Elderly_info, Staff_in
 
 """
 ----------------------------------------------------------------------
+信息修改
+----------------------------------------------------------------------
+"""
+# TODO
+def update_item(item_type, item_info):
+    """
+    修改指定的对象
+    :param item_type: 对象类型（如Elderly）
+    :param item_id: 对象id（如Elderly_id）
+    :return:
+    """
+    try:
+        session.query(item_type).filter(item_type.id == item_info.id).update(item_info.dict())
+        # if item:
+        #     # 部分更新
+        #     update_dict = item_type.dict(exclude_unset=True)
+        #     for k, v in update_dict.items():
+        #         setattr(item, k, v)
+        session.commit()
+        session.flush()
+        return 1, "修改成功"
+    except Exception as e:
+        print(e)
+        return 0, "修改失败"
+
+
+def update_volunteer(volunteer_info):
+    """
+    删除指定义工信息
+    """
+    return update_item(Volunteer, volunteer_info)
+
+
+def update_elderly(elderly_info):
+    """
+    删除指定老人信息
+    """
+    return update_item(Elderly, elderly_info)
+
+def update_staff(staff_info):
+    """
+    删除指定老人信息
+    """
+    return update_item(Staff, staff_info)
+
+
+"""
+----------------------------------------------------------------------
 信息添加
 ----------------------------------------------------------------------
 """
@@ -96,7 +144,7 @@ def delete_item(item_type, item_id):
     :return:
     """
     try:
-        item = session.query(item_type).filter(id=item_id).first()
+        item = session.query(item_type).filter(item_type.id==item_id).first()
         session.delete(item)
         session.commit()
 

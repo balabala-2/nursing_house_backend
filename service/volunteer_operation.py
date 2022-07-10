@@ -26,3 +26,13 @@ def handle_del_volunteer_info(volunteer_id):
     """
     state, msg = user_operation.delete_volunteer(volunteer_id)
     return Base_response(state=state, msg=msg)
+
+
+def handle_update_volunteer_info (volunteer_info: Volunteer_info):
+    """
+    修改老人信息
+    :param id: elderly_info:
+    :return:
+    """
+    state, msg = user_operation.update_volunteer(volunteer_info)
+    return Base_response(state=state, msg=msg)
