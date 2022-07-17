@@ -3,6 +3,7 @@ from starlette.middleware.cors import CORSMiddleware
 from controller.login import router as login_router
 from controller.user_manage import router as elderly_router
 from controller.video import router as video_router
+from controller.event import router as chart_router
 
 # 初始化服务器
 def create_app() -> FastAPI:
@@ -29,6 +30,7 @@ def register_router(app: FastAPI) -> None:
     app.include_router(login_router)
     app.include_router(video_router)
     app.include_router(elderly_router)
+    app.include_router(chart_router)
 
 
 def register_cors(app: FastAPI) -> None:

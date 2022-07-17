@@ -1,7 +1,92 @@
 from dao.config import session
 from dao.table.user import *
-from schemas.request import Manager_info, Volunteer_info, Elderly_info, Staff_info
+from schemas.request import Manager_info, Volunteer_info, Elderly_info, Staff_info, Manager_info_to_update, Manager_password_to_update
+import time, datetime
+"""
+----------------------------------------------------------------------
+信息修改
+----------------------------------------------------------------------
+"""
+# TODO
+def update_item(item_type, item_info):
+    """
+    修改指定的对象
+    :param item_type: 对象类型（如Elderly）
+    :param item_id: 对象id（如Elderly_id）
+    :return:
+    """
+    try:
+        session.query(item_type).filter(item_type.id == item_info.id).update(item_info.dict())
+        # if item:
+        #     # 部分更新
+        #     update_dict = item_type.dict(exclude_unset=True)
+        #     for k, v in update_dict.items():
+        #         setattr(item, k, v)
+        session.commit()
+        session.flush()
+        return 1, "修改成功"
+    except Exception as e:
+        print(e)
+        return 0, "修改失败"
 
+
+def update_volunteer(volunteer_info):
+    """
+    删除指定义工信息
+    """
+    return update_item(Volunteer, volunteer_info)
+
+
+def update_elderly(elderly_info):
+    """
+    删除指定老人信息
+    """
+    return update_item(Elderly, elderly_info)
+
+def update_staff(staff_info):
+    """
+    删除指定老人信息
+    """
+    return update_item(Staff, staff_info)
+
+
+def update_manager_info(manager_info_to_update: Manager_info_to_update):
+    """
+    修改账号密码
+    """
+    try:
+        manager = session\
+                    .query(Manager)\
+                    .filter_by(id = manager_info_to_update.id)\
+                    .update({
+                        "username":manager_info_to_update.username,
+                        "name": manager_info_to_update.name,
+                        "tel":manager_info_to_update.tel,
+                        "entry_time": manager_info_to_update.entry_time,
+                    })
+        session.commit()
+        session.flush()
+        return 1, "修改成功"
+    except Exception as e:
+        return 0, "修改失败"
+
+def update_manager_password(manager_password_to_update: Manager_password_to_update):
+    """
+    修改账号密码
+    """
+    try:
+        manager = session.query(Manager).filter_by(id = manager_password_to_update.id).first()
+        if manager.password == manager_password_to_update.old_password:
+            session.query(Manager).filter_by(id = manager_password_to_update.id)\
+            .update({"password":manager_password_to_update.new_password})
+            session.commit()
+            session.flush()
+            return 1, "修改成功"
+        else:
+            return 0, "原密码输入错误"
+    except Exception as e:
+        print(e)
+        return 0, "修改失败"
 """
 ----------------------------------------------------------------------
 信息添加
@@ -63,7 +148,8 @@ def add_elderly(elderly_info: Elderly_info):
         session.add(elderly)
         session.commit()
         return 1, "成功添加老人信息"
-    except Exception:
+    except Exception as e:
+        print(e)
         return 0, "添加老人信息失败"
 
 
@@ -90,19 +176,19 @@ def add_staff(staff_info: Staff_info):
 
 def delete_item(item_type, item_id):
     """
-    删除指定的对象
+    修改指定的对象的离开日期字段
     :param item_type: 对象类型（Elderly）
     :param item_id: 对象id（Elderly_id）
     :return:
     """
     try:
-        item = session.query(item_type).filter(id=item_id).first()
-        session.delete(item)
+        # if item_type is
+        session.query(item_type).filter(item_type.id==item_id).update({"resignation_time": datetime.date.today()})
         session.commit()
 
-        return 1, "删除成功"
+        return 1, "离职成功"
     except Exception:
-        return 0, "删除失败"
+        return 0, "离职失败"
 
 def delete_volunteer(volunteer_id):
     """
@@ -115,7 +201,15 @@ def delete_elderly(elderly_id):
     """
     删除指定老人信息
     """
-    return delete_item(Elderly, elderly_id)
+    try:
+        # if item_type is
+        session.query(Elderly).filter_by(id = elderly_id).update({"out_time": datetime.date.today()})
+        session.commit()
+
+        return 1, "出院成功"
+    except Exception as e:
+        print(e)
+        return 0, "出院失败"
 
 def delete_staff(staff_id):
     """
@@ -147,7 +241,8 @@ def query(query_type, query_type_info):
             results.append(query_type_info(**item))
         return 1, "查询成功", results
 
-    except Exception:
+    except Exception as e:
+        print("exception??????", e)
         return 0, "查询失败", None
 
 
@@ -156,7 +251,8 @@ def query_all_elderly_info():
     查询所有老人的信息
     :return:
     """
-    return query(Elderly, Elderly_info)
+    res = query(Elderly, Elderly_info)
+    return res
 
 
 def query_all_volunteer_info():
@@ -200,3 +296,15 @@ def query_manager_tel(tel):
         return 0, "该手机未注册", None
     else:
         return 1, "该手机已注册，可以发送验证码", manager
+
+def query_manager_by_id(id):
+    """
+    id 查询管理员信息
+    :param id:
+    :return:
+    """
+    manager = session.query(Manager).filter_by(id=id).first()
+    if manager:
+        return 1, "查询成功", manager
+    else:
+        return 0, "查询失败", None

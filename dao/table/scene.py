@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Date, Integer, BINARY
+from sqlalchemy import Column, String, Date, Integer, BINARY, Text
 from dao.config import base
 
 
@@ -14,6 +14,8 @@ class Interactive(base):
     volunteer_id = Column(Integer)
     # 图片
     img = Column(BINARY)
+    # 交谈的文本
+    text = Column(String)
     # 日期
     create_time = Column(Date)
 
@@ -24,8 +26,6 @@ class Invade(base):
     __tablename__ = 'invade'
     # id
     id = Column(Integer, primary_key=True, autoincrement=True)
-    # 入侵类别：老人，义工，管理员，陌生人
-    invade_type = Column(String)
     # 图片
     img = Column(BINARY)
     # 日期
@@ -38,8 +38,6 @@ class Fall(base):
     __tablename__ = 'fall'
     # id
     id = Column(Integer, primary_key=True, autoincrement=True)
-    # 哪个老人摔倒了
-    elderly_id = Column(Integer)
     # 图片
     img = Column(BINARY)
     # 日期

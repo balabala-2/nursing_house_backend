@@ -1,4 +1,5 @@
 import datetime
+from typing import Union
 
 from pydantic import BaseModel
 
@@ -37,24 +38,36 @@ class Manager_info(BaseModel):
     gender: int = 1
     tel: str
     password: str
-    face_feature: str = ''
-    entry_time: datetime.date
+    entry_time: datetime.date = datetime.date.today()
     resignation_time: datetime.date = None
 
+# 修改管理员账号信息时的请求体对象
+class Manager_info_to_update(BaseModel):
+    id: int
+    username: str
+    name: str = ''
+    tel: str
+    entry_time: datetime.date
+
+# 修改管理员账号的密码时的请求体对象
+class Manager_password_to_update(BaseModel):
+    id: int
+    old_password: str
+    new_password: str
 
 class Elderly_info(BaseModel):
     """
     老年人信息
     """
+    id: int
     name: str
     gender: int
     tel: str
     id_card: str
     birthday: datetime.date
     in_time: datetime.date
-    out_time: datetime.date
-    face_feature: str
-    room_number: int
+    out_time: datetime.date = None
+    room_number: str
     guardian_name: str
     guardian_tel: str
     guardian_relation: str
@@ -63,26 +76,32 @@ class Elderly_info(BaseModel):
 
 
 class Volunteer_info(BaseModel):
+    id: int
     name: str
     gender: int
     tel: str
     education: str
-    face_feature: str
     remarks: str
     create_manager_id: int
-    entry_time: datetime.date
-    resignation_time: datetime.date
+    entry_time: datetime.date = datetime.date.today()
+    resignation_time: datetime.date = None
 
 
 class Staff_info(BaseModel):
+    id: int
     name: str
     gender: int
     tel: str
     education: str
-    face_feature: str
     occupation: str
     wages: int
     remarks: str
     create_manager_id: int
-    entry_time: datetime.date
-    resignation_time: datetime.date
+    entry_time: datetime.date = datetime.date.today()
+    resignation_time: datetime.date = None
+
+
+class Face_video_info(BaseModel):
+    user_id: int
+    user_type: str
+

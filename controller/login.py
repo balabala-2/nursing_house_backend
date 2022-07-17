@@ -18,3 +18,8 @@ def login(login_info: Login_info):
 def register(register_info: Register_info):
     response = manager_operation.handle_register(register_info)
     return response
+
+
+@router.post('/api/register_send_auth_code')
+def send_auth_code(tel):
+    return {'verifycode': 241524}

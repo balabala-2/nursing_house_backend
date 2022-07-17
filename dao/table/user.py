@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Date, Integer, BOOLEAN, BINARY
+from sqlalchemy import Column, String, DateTime, Integer, BOOLEAN, LargeBinary
 
 from dao.config import base
 
@@ -19,13 +19,11 @@ class Manager(base):
     tel = Column(String, unique=True)
     # 密码
     password = Column(String, nullable=False)
-    # 录入脸部特征
-    face_feature = Column(String, default="")
 
     # 入职时间
-    entry_time = Column(Date)
+    entry_time = Column(DateTime)
     # 离职时间
-    resignation_time = Column(Date, default=None)
+    resignation_time = Column(DateTime, default=None)
 
 
 class Elderly(base):
@@ -44,15 +42,13 @@ class Elderly(base):
     # 身份证
     id_card = Column(String)
     # 生日
-    birthday = Column(Date)
+    birthday = Column(DateTime)
     # 入院日期
-    in_time = Column(Date)
+    in_time = Column(DateTime)
     # 出院日期
-    out_time = Column(Date, default=None)
-    # 录入脸部特征
-    face_feature = Column(String)
+    out_time = Column(DateTime, default=None)
     # 房间号
-    room_number = Column(Integer)
+    room_number = Column(String)
 
     # 监护人姓名，电话，与老人的关系
     guardian_name = Column(String)
@@ -81,8 +77,6 @@ class Volunteer(base):
     tel = Column(String, unique=True)
     # 学历
     education = Column(String)
-    # 录入脸部特征
-    face_feature = Column(String)
 
     # 备注
     remarks = Column(String)
@@ -90,9 +84,9 @@ class Volunteer(base):
     create_manager_id = Column(Integer)
 
     # 入职时间
-    entry_time = Column(Date)
+    entry_time = Column(DateTime)
     # 离职时间
-    resignation_time = Column(Date, default=None)
+    resignation_time = Column(DateTime, default=None)
 
 
 class Staff(base):
@@ -110,8 +104,6 @@ class Staff(base):
     tel = Column(String, unique=True)
     # 学历
     education = Column(String)
-    # 录入脸部特征
-    face_feature = Column(String)
 
     # 职务(清洁工，食堂大妈)
     occupation = Column(String)
@@ -125,9 +117,9 @@ class Staff(base):
     create_manager_id = Column(Integer)
 
     # 入职时间
-    entry_time = Column(Date)
+    entry_time = Column(DateTime)
     # 离职时间
-    resignation_time = Column(Date, default=None)
+    resignation_time = Column(DateTime, default=None)
 
 
 class User_head_feature(base):
@@ -143,7 +135,7 @@ class User_head_feature(base):
     # 人员对应的id
     user_id = Column(Integer)
     # 人脸特征：ndarray -> '.npy' byte
-    head_feature = Column(BINARY)
+    head_feature = Column(LargeBinary)
 
 
 class User_head_image(base):
@@ -153,7 +145,11 @@ class User_head_image(base):
     __tablename__ = 'user_head_image'
     # id
     id = Column(Integer, primary_key=True, autoincrement=True)
-    # user_head_feature id
-    head_feature_id = Column(Integer)
+    # 人员类型：manager, elderly, volunteer, staff
+    user_type = Column(String)
+    # 人员对应的id
+    user_id = Column(Integer)
+    # # 头像的类型: 比如left, right, up, down, blink, open_mouth, normal
+    # image_type = Column(String)
     # image -> byte
-    image = Column(BINARY)
+    image = Column(LargeBinary)
